@@ -13,18 +13,25 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-      - name: Run build
+      - name: Install linux package
         run: |
           sudo dpkg --add-architecture i386
           sudo apt update 
           sudo apt install -y clang g++-multilib lib32stdc++-7-dev lib32z1-dev libc6-dev-i386 linux-libc-dev:i386 curl git python3 python3-pip python3-setuptools python-setuptools automake cmake libtool
+
+      - name: 'Prepare Sourcemod Repository'
+        run: |
           sudo git clone --recursive https://gitlab.com/counterstrikesource/sourcemod.git
           sudo bash sourcemod/tools/checkout-deps.sh
           sudo mkdir -p sourcemod/build
+
+      - name: 'Compile Sourcemod'
+        run: |
           cd sourcemod/build
           sudo python ../configure.py --enable-optimize --enable-asan --sdks=csgo,css
           sudo CLANG_DEFAULT_CXX_STDLIB=libc++ /home/runner/.local/bin/ambuild
           sudo tar cfvz sourcemod-1.11-nide.tar.gz package/
+
       - name: 'Upload Sourcemod'
         uses: actions/upload-artifact@v2
         with:
