@@ -29,7 +29,7 @@ jobs:
         run: |
           cd sourcemod/build
           sudo python3 ../configure.py --enable-optimize --enable-asan --sdks=csgo,css
-          sudo CLANG_DEFAULT_CXX_STDLIB=libc++ /home/runner/.local/bin/ambuild
+          sudo CLANG_DEFAULT_CXX_STDLIB=libc++ /home/.local/bin/ambuild
           sudo tar cfvz sourcemod-1.11-nide.tar.gz package/
 
       - name: 'Upload Sourcemod'
